@@ -5,6 +5,7 @@
 
 # Alternatively, you can also use the GoodService.io API:
 # https://www.goodservice.io/api/stops/<stop_id>
+
 sensor:
   ######### 7 Train  #########
   - platform: gtfs_rt
@@ -20,7 +21,6 @@ sensor:
         stopid: "723S"
 
   # Get train service status from Goodservice.io
-
   - platform: rest
     resource: https://www.goodservice.io/api/routes/7
     method: GET
@@ -35,25 +35,6 @@ sensor:
       - "service_irregularity_summaries"
       - "service_changes"
 
-  # Calcualte time between trains
-  - platform: template
-    sensors:
-      time_between_trains_7_uptown:
-        friendly_name: "Time Between Trains: 7 Uptown"
-        value_template: >
-          {% set due_in = states.sensor.gtfs_mta_subway_7_uptown.attributes.get('Due in') %}
-          {% set next_due_in = states.sensor.gtfs_mta_subway_7_uptown.attributes.get('Next bus due in') %}
-          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
-        unit_of_measurement: "min"
-
-      time_between_trains_7_downtown:
-        friendly_name: "Time Between Trains: 7 Downtown"
-        value_template: >
-          {% set due_in = states.sensor.gtfs_mta_subway_7_downtown.attributes.get('Due in') %}
-          {% set next_due_in = states.sensor.gtfs_mta_subway_7_downtown.attributes.get('Next bus due in') %}
-          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
-        unit_of_measurement: "min"
-
   # Create some rolling averages of trains
   - platform: statistics
     name: "Time Between Trains 30-Minute Average: 7 Uptown"
@@ -62,6 +43,7 @@ sensor:
     max_age:
       minutes: 30
     precision: 1
+
   - platform: statistics
     name: "Time Between Trains 30-Minute Average: 7 Downtown"
     entity_id: sensor.time_between_trains_7_downtown
@@ -69,6 +51,7 @@ sensor:
     max_age:
       minutes: 30
     precision: 1
+
   ######### 6 Train  #########
   - platform: gtfs_rt
     trip_update_url: "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
@@ -83,7 +66,6 @@ sensor:
         stopid: "631S"
 
   # Get train service status from Goodservice.io
-
   - platform: rest
     resource: https://www.goodservice.io/api/routes/6
     method: GET
@@ -98,24 +80,6 @@ sensor:
       - "service_irregularity_summaries"
       - "service_changes"
 
-  # Calcualte time between trains
-  - platform: template
-    sensors:
-      time_between_trains_6_uptown:
-        friendly_name: "Time Between Trains: 6 Uptown"
-        value_template: >
-          {% set due_in = states.sensor.gtfs_mta_subway_6_uptown.attributes.get('Due in') %}
-          {% set next_due_in = states.sensor.gtfs_mta_subway_6_uptown.attributes.get('Next bus due in') %}
-          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
-        unit_of_measurement: "min"
-
-      time_between_trains_6_downtown:
-        friendly_name: "Time Between Trains: 6 Downtown"
-        value_template: >
-          {% set due_in = states.sensor.gtfs_mta_subway_6_downtown.attributes.get('Due in') %}
-          {% set next_due_in = states.sensor.gtfs_mta_subway_6_downtown.attributes.get('Next bus due in') %}
-          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
-        unit_of_measurement: "min"
   # Create some rolling averages of trains
   - platform: statistics
     name: "Time Between Trains 30-Minute Average: 6 Uptown"
@@ -124,6 +88,7 @@ sensor:
     max_age:
       minutes: 30
     precision: 1
+
   - platform: statistics
     name: "Time Between Trains 30-Minute Average: 6 Downtown"
     entity_id: sensor.time_between_trains_6_downtown
@@ -131,6 +96,7 @@ sensor:
     max_age:
       minutes: 30
     precision: 1
+
   ######### E Train  #########
   - platform: gtfs_rt
     trip_update_url: "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace"
@@ -145,7 +111,6 @@ sensor:
         stopid: "F11S"
 
   # Get train service status from Goodservice.io
-
   - platform: rest
     resource: https://www.goodservice.io/api/routes/E
     method: GET
@@ -160,34 +125,6 @@ sensor:
       - "service_irregularity_summaries"
       - "service_changes"
 
-  # Calcualte time between trains
-  - platform: template
-    sensors:
-      time_between_trains_e_uptown:
-        friendly_name: "Time Between Trains: E Uptown"
-        value_template: >
-          {% set due_in = states.sensor.gtfs_mta_subway_e_uptown.attributes.get('Due in') %}
-          {% set next_due_in = states.sensor.gtfs_mta_subway_e_uptown.attributes.get('Next bus due in') %}
-          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
-        unit_of_measurement: "min"
-
-      time_between_trains_e_downtown:
-        friendly_name: "Time Between Trains: E Downtown"
-        value_template: >
-          {% set due_in = states.sensor.gtfs_mta_subway_e_downtown.attributes.get('Due in') %}
-          {% set next_due_in = states.sensor.gtfs_mta_subway_e_downtown.attributes.get('Next bus due in') %}
-          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
-        unit_of_measurement: "min"
-
-      current_weather_condition:
-        friendly_name: "Current Weather Condition"
-        value_template: >
-          {% if is_state('sun.sun', 'above_horizon') %}
-            {{ states('sensor.home_condition_day_0') }}
-          {% else %}
-            {{ states('sensor.home_condition_night_0') }}
-          {% endif %}
-
   # Create some rolling averages of trains
   - platform: statistics
     name: "Time Between Trains 30-Minute Average: E Uptown"
@@ -196,6 +133,7 @@ sensor:
     max_age:
       minutes: 30
     precision: 1
+
   - platform: statistics
     name: "Time Between Trains 30-Minute Average: E Downtown"
     entity_id: sensor.time_between_trains_e_downtown
@@ -204,14 +142,85 @@ sensor:
       minutes: 30
     precision: 1
 
-template:
-  # Update screen only when occupancy is detected.
 
+# =============================================================================
+# MODERN TEMPLATE SYNTAX
+# All template sensors consolidated here (migrated from legacy platform: template)
+# =============================================================================
+template:
+  # -------------------------------------------------------------------------
+  # State-based template sensors (migrated from legacy syntax)
+  # -------------------------------------------------------------------------
+  - sensor:
+      # 7 Train time between trains
+      - name: "Time Between Trains: 7 Uptown"
+        unique_id: time_between_trains_7_uptown
+        unit_of_measurement: "min"
+        state: >
+          {% set due_in = states.sensor.gtfs_mta_subway_7_uptown.attributes.get('Due in') %}
+          {% set next_due_in = states.sensor.gtfs_mta_subway_7_uptown.attributes.get('Next bus due in') %}
+          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
+
+      - name: "Time Between Trains: 7 Downtown"
+        unique_id: time_between_trains_7_downtown
+        unit_of_measurement: "min"
+        state: >
+          {% set due_in = states.sensor.gtfs_mta_subway_7_downtown.attributes.get('Due in') %}
+          {% set next_due_in = states.sensor.gtfs_mta_subway_7_downtown.attributes.get('Next bus due in') %}
+          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
+
+      # 6 Train time between trains
+      - name: "Time Between Trains: 6 Uptown"
+        unique_id: time_between_trains_6_uptown
+        unit_of_measurement: "min"
+        state: >
+          {% set due_in = states.sensor.gtfs_mta_subway_6_uptown.attributes.get('Due in') %}
+          {% set next_due_in = states.sensor.gtfs_mta_subway_6_uptown.attributes.get('Next bus due in') %}
+          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
+
+      - name: "Time Between Trains: 6 Downtown"
+        unique_id: time_between_trains_6_downtown
+        unit_of_measurement: "min"
+        state: >
+          {% set due_in = states.sensor.gtfs_mta_subway_6_downtown.attributes.get('Due in') %}
+          {% set next_due_in = states.sensor.gtfs_mta_subway_6_downtown.attributes.get('Next bus due in') %}
+          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
+
+      # E Train time between trains
+      - name: "Time Between Trains: E Uptown"
+        unique_id: time_between_trains_e_uptown
+        unit_of_measurement: "min"
+        state: >
+          {% set due_in = states.sensor.gtfs_mta_subway_e_uptown.attributes.get('Due in') %}
+          {% set next_due_in = states.sensor.gtfs_mta_subway_e_uptown.attributes.get('Next bus due in') %}
+          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
+
+      - name: "Time Between Trains: E Downtown"
+        unique_id: time_between_trains_e_downtown
+        unit_of_measurement: "min"
+        state: >
+          {% set due_in = states.sensor.gtfs_mta_subway_e_downtown.attributes.get('Due in') %}
+          {% set next_due_in = states.sensor.gtfs_mta_subway_e_downtown.attributes.get('Next bus due in') %}
+          {{ (next_due_in - due_in) if due_in is not none and next_due_in is not none else 'unknown' }}
+
+      # Weather condition sensor
+      - name: "Current Weather Condition"
+        unique_id: current_weather_condition
+        state: >
+          {% if is_state('sun.sun', 'above_horizon') %}
+            {{ states('sensor.home_condition_day_0') }}
+          {% else %}
+            {{ states('sensor.home_condition_night_0') }}
+          {% endif %}
+
+  # -------------------------------------------------------------------------
+  # Binary sensors
+  # -------------------------------------------------------------------------
   - binary_sensor:
       - name: Weatherman Motion Detected
         unique_id: "dfa78de7-d761-425f-9731-86f1af332eac"
         device_class: "occupancy"
-        delay_off: 00:01
+        delay_off: "00:01:00"
         state: >-
           {%- if states('binary_sensor.bedroom_is_occupied') == 'on' and
                  states('binary_sensor.everyone_at_home_is_asleep') == 'off' %}
@@ -219,23 +228,10 @@ template:
           {%- else -%}
             off
           {%- endif -%}
-  # - sensor:
-  #     - name: "Time Between Trains: 7 Downtown"
-  #       state: >
-  #         {% set due_in = states.sensor.gtfs_mta_subway_7_downtown.attributes['Due in'] %}
-  #         {% set next_due_in = states.sensor.gtfs_mta_subway_7_downtown.attributes['Next bus due in'] %}
-  #         {{ next_due_in - due_in if due_in is not none and next_due_in is not none else 'unknown' }}
-  #       unit_of_measurement: "min"
-  # - sensor:
-  #     - name: "Time Between Trains: 7 Uptown"
-  #       state: >
-  #         {% set due_in = states.sensor.gtfs_mta_subway_7_uptown.attributes['Due in'] %}
-  #         {% set next_due_in = states.sensor.gtfs_mta_subway_7_uptown.attributes['Next bus due in'] %}
-  #         {{ next_due_in - due_in if due_in is not none and next_due_in is not none else 'unknown' }}
-  #       unit_of_measurement: "min"
 
-  # Bundle up all the data to send over to Weatherman (ESPHome device).
-
+  # -------------------------------------------------------------------------
+  # Trigger-based Weatherman Data sensor
+  # -------------------------------------------------------------------------
   - trigger:
       platform: time_pattern
       minutes: "/1"
@@ -250,8 +246,6 @@ template:
       - name: Weatherman Data
         state: "OK"
         attributes:
-          # train_status_7: >
-          #   {{ states('sensor.mta_subway_7_service_status') | upper }}
           train_status_6_uptown: >
             {{ state_attr('sensor.mta_subway_6_service_status', 'direction_statuses').north | upper }}
           train_status_6_downtown: >
